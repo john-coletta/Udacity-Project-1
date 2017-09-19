@@ -2,15 +2,17 @@ import csv
 from datetime import datetime
 from pprint import pprint
 
-data_files = ['./data/NYC-CitiBike-2016.csv',
-			  './data/Chicago-Divvy-2016.csv',
-			  './data/Washington-CapitalBikeshare-2016.csv']
+directory = 'C:/John/Programming/Code/Udacity/Part 2'
+
+data_files = [directory + '/data/NYC-CitiBike-2016.csv',
+			  directory + '/data/Chicago-Divvy-2016.csv',
+			  directory + '/data/Washington-CapitalBikeshare-2016.csv']
  
 def print_first_point(filename):
-'''
-Prints and returns first data point from
-a csv file that inlcudes a header row
-'''
+	'''
+	Prints and returns first data point from
+	a csv file that inlcudes a header row
+	'''
 	city = filename.split('-')[0].split('/')[-1]
 	print('\nCity: {}'.format(city))
 	
