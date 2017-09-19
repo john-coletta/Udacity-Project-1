@@ -86,3 +86,25 @@ def type_of_user(datum, city):
 			
 	return user_type
 	
+def condense_data(in_file, out_file, city):
+	'''
+	Takes the full data from input file and condenses
+	it into specified output file, city determines how data is parsed.
+	Uses helper fuctions from above.
+	'''
+	with open(out_file, 'w') as f_out, open(in_file) as f_in:
+		out_colnames = ['duration', 'month', 'hour', 'day_of_week', 'user_type']
+		trip_writer = csv.DictWriter(f_out, fieldnames = out_colnames)
+		trip_writer.writheader()
+		
+		trip_reader = csv.DictReader(f_in)
+		
+		for row in trip_reader:
+			new_point = {out_colnames[0]:duration_in_mins(row, city),
+                         out_colnames[1]:time_of_trip(row, city)[0],
+                         out_colnames[2]:time_of_trip(row, city)[1],
+                         out_colnames[3]:time_of_trip(row, city)[2],
+                         out_colnames[4]:type_of_user(row, city)}
+            
+            trip_writer.writerow(new_point)
+	
