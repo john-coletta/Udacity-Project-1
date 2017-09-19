@@ -69,3 +69,20 @@ def time_of_trip(datum, city):
 		
 	return (month, hour, day_of_week)
 	
+def type_of_user(datum, city):
+	'''Takes a dictionary containing info about a single trip as input(datum)
+	and its origin city and returns the type of system user that made the trip
+	'''
+	if city == 'Chicago':
+        user_type = datum['usertype']
+    if city == 'NYC':
+        user_type = datum['usertype']
+    if city == 'Washington':
+        user_type1 = datum['Member Type']
+        if user_type1 == 'Registered':
+            user_type = 'Subscriber'
+        if user_type1 == 'Casual':
+            user_type = 'Customer'
+			
+	return user_type
+	
