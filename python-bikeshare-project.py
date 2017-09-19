@@ -92,7 +92,7 @@ def condense_data(in_file, out_file, city):
 	it into specified output file, city determines how data is parsed.
 	Uses helper fuctions from above.
 	'''
-	with open(out_file, 'w') as f_out, open(in_file) as f_in:
+	with open(out_file, 'wb') as f_out, open(in_file) as f_in:
 		out_colnames = ['duration', 'month', 'hour', 'day_of_week', 'user_type']
 		trip_writer = csv.DictWriter(f_out, fieldnames = out_colnames)
 		trip_writer.writeheader()
