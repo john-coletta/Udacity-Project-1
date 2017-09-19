@@ -25,10 +25,19 @@ def print_first_point(filename):
 		pprint(first_trip)
 		
 	return(city, first_trip)
-
-example_trips = {}
-for data in data_files:
-	city, first_trip = print_first_point(data)
-	example_trips[city] = first_trip
 	
-print(example_trips)
+def duration_in_mins(datum, city):
+	''' Takes a single trip as input(datum) and its
+	origin city and returns the duration of the trip
+	in minutes.
+	'''
+	
+	if city == 'Washington':
+		millis = datum['Duration (ms)']
+		s = float(ms) / 1000
+		duration = s / 60
+	if city == 'Chicago' or city == 'NYC':
+		s = datum['tripduration']
+		duration = float(s) / 60
+		
+	return duration
