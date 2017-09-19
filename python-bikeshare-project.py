@@ -107,4 +107,14 @@ def condense_data(in_file, out_file, city):
                          out_colnames[4]:type_of_user(row, city)}
             
             trip_writer.writerow(new_point)
+
+city_info = {'Washington': {'in_file': data_files[2],
+                            'out_file': directory + '/data/Washington-2016-Summary.csv'},
+             'Chicago': {'in_file': data_files[1],
+                         'out_file': directory + '/data/Chicago-2016-Summary.csv'},
+             'NYC': {'in_file': data_files[0],
+                     'out_file': directory + '/data/NYC-2016-Summary.csv'}}
+
+for city, filenames in city_info.items():
+    condense_data(filenames['in_file'], filenames['out_file'], city)
 	
