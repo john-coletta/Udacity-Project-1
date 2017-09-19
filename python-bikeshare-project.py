@@ -34,7 +34,7 @@ def duration_in_mins(datum, city):
 	
 	if city == 'Washington':
 		millis = datum['Duration (ms)']
-		s = float(ms) / 1000
+		s = float(millis) / 1000
 		duration = s / 60
 	if city == 'Chicago' or city == 'NYC':
 		s = datum['tripduration']
@@ -48,24 +48,24 @@ def time_of_trip(datum, city):
 	the trip was made.
 	'''
 	if city == 'Washington':
-        date = datum['Start date']
+		date = datum['Start date']
         #Convert to datetime object via strptime
-        d = datetime.strptime(date, '%m/%d/%Y %H:%M')
-        month = d.month
-        hour = d.hour
-        day_of_week = d.strftime('%A')
-    if city == 'NYC':
-        date = datum['starttime']
-        d = datetime.strptime(date, '%m/%d/%Y %H:%M:%S')
-        month = d.month
-        hour = d.hour
-        day_of_week = d.strftime('%A')
-    if city == 'Chicago':
-        date = datum['starttime']
-        d = datetime.strptime(date, '%m/%d/%Y %H:%S')
-        month = d.month
-        hour = d.hour
-        day_of_week = d.strftime('%A')
+		d = datetime.strptime(date, '%m/%d/%Y %H:%M')
+		month = d.month
+		hour = d.hour
+		day_of_week = d.strftime('%A')
+	if city == 'NYC':
+		date = datum['starttime']
+		d = datetime.strptime(date, '%m/%d/%Y %H:%M:%S')
+		month = d.month
+		hour = d.hour
+		day_of_week = d.strftime('%A')
+	if city == 'Chicago':
+		date = datum['starttime']
+		d = datetime.strptime(date, '%m/%d/%Y %H:%S')
+		month = d.month
+		hour = d.hour
+		day_of_week = d.strftime('%A')
 		
 	return (month, hour, day_of_week)
 	
@@ -74,15 +74,15 @@ def type_of_user(datum, city):
 	and its origin city and returns the type of system user that made the trip
 	'''
 	if city == 'Chicago':
-        user_type = datum['usertype']
-    if city == 'NYC':
-        user_type = datum['usertype']
-    if city == 'Washington':
-        user_type1 = datum['Member Type']
-        if user_type1 == 'Registered':
-            user_type = 'Subscriber'
-        if user_type1 == 'Casual':
-            user_type = 'Customer'
+		user_type = datum['usertype']
+	if city == 'NYC':
+		user_type = datum['usertype']
+	if city == 'Washington':
+		user_type1 = datum['Member Type']
+		if user_type1 == 'Registered':
+			user_type = 'Subscriber'
+		if user_type1 == 'Casual':
+			user_type = 'Customer'
 			
 	return user_type
 	
@@ -95,7 +95,7 @@ def condense_data(in_file, out_file, city):
 	with open(out_file, 'w') as f_out, open(in_file) as f_in:
 		out_colnames = ['duration', 'month', 'hour', 'day_of_week', 'user_type']
 		trip_writer = csv.DictWriter(f_out, fieldnames = out_colnames)
-		trip_writer.writheader()
+		trip_writer.writeheader()
 		
 		trip_reader = csv.DictReader(f_in)
 		
@@ -106,7 +106,7 @@ def condense_data(in_file, out_file, city):
                          out_colnames[3]:time_of_trip(row, city)[2],
                          out_colnames[4]:type_of_user(row, city)}
             
-            trip_writer.writerow(new_point)
+			trip_writer.writerow(new_point)
 
 city_info = {'Washington': {'in_file': data_files[2],
                             'out_file': directory + '/data/Washington-2016-Summary.csv'},
