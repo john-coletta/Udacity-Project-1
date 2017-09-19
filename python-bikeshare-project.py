@@ -27,8 +27,8 @@ def print_first_point(filename):
 	return(city, first_trip)
 	
 def duration_in_mins(datum, city):
-	''' Takes a single trip as input(datum) and its
-	origin city and returns the duration of the trip
+	''' Takes a dictionary with info about a single trip as input(datum) 
+	and its origin city and returns the duration of the trip
 	in minutes.
 	'''
 	
@@ -41,3 +41,31 @@ def duration_in_mins(datum, city):
 		duration = float(s) / 60
 		
 	return duration
+	
+def time_of_trip(datum, city):
+	''' Takes a dictionary with info about a single trip as input(datum)
+	and its origin city and returns the month, hour, and day of the week
+	the trip was made.
+	'''
+	if city == 'Washington':
+        date = datum['Start date']
+        #Convert to datetime object via strptime
+        d = datetime.strptime(date, '%m/%d/%Y %H:%M')
+        month = d.month
+        hour = d.hour
+        day_of_week = d.strftime('%A')
+    if city == 'NYC':
+        date = datum['starttime']
+        d = datetime.strptime(date, '%m/%d/%Y %H:%M:%S')
+        month = d.month
+        hour = d.hour
+        day_of_week = d.strftime('%A')
+    if city == 'Chicago':
+        date = datum['starttime']
+        d = datetime.strptime(date, '%m/%d/%Y %H:%S')
+        month = d.month
+        hour = d.hour
+        day_of_week = d.strftime('%A')
+		
+	return (month, hour, day_of_week)
+	
