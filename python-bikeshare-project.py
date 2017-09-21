@@ -146,4 +146,41 @@ def number_of_trips(filename):
         
         # return tallies as a tuple
 		return(n_subscribers, n_customers, n_total)
+#Create a dictionary for the cleaned files
+cleaned_files = {'Washington':'./data/Washington-2016-Summary.csv', 
+'NYC':'./data/NYC-2016-Summary.csv', 
+'Chicago':'./data/Chicago-2016-Summary.csv'}
+
+for city in cleaned_files:
+	print('{}: {}'.format(city,number_of_trips(cleaned_files[city])))
+#Calculate the max number of trips  
+max_trips = 0
+for city in cleaned_files:
+	new_max = number_of_trips(cleaned_files[city])[2]
+	if new_max > max_trips:
+		max_trips = new_max
+		biggest_city = city
+
+print('{} had the most trips in 2016 with {}.'.format(biggest_city, max_trips))
+#Calculate the number of trips by subscribers
+sub_trips = 0
+for city in cleaned_files:
+	city_subs = number_of_trips(cleaned_files[city])[0] / number_of_trips(cleaned_files[city])[2]
+	if city_subs > sub_trips:
+		sub_trips = city_subs
+		city_with_highest_sub_ratio = city
+pct_subs = 100 * sub_trips
+
+print('{} had the highest proportion of trips made by subscribers with {}% of the total trips.'.format(city_with_highest_sub_ratio, round(pct_subs, 2)))
+#Calculate the number of trips by non-subscribers
+non_sub_trips = 0
+for city in cleaned_files:
+	city_non_subs = number_of_trips(cleaned_files[city])[1] / number_of_trips(cleaned_files[city])[2]
+	if city_non_subs > non_sub_trips:
+		non_sub_trips = city_non_subs
+		city_with_highest_non_sub = city
+pct_non_subs = 100 * non_sub_trips
+
+print('{} had the highest proportion of trips made by short-term customers with {}% of the total trips.'.format(city_with_highest_non_sub, round(pct_non_subs, 2)))
+
 	
