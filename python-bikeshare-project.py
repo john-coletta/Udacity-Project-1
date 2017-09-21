@@ -183,4 +183,37 @@ pct_non_subs = 100 * non_sub_trips
 
 print('{} had the highest proportion of trips made by short-term customers with {}% of the total trips.'.format(city_with_highest_non_sub, round(pct_non_subs, 2)))
 
-	
+def avg_duration(filename, n=2):
+	'''
+	This function calculates the average duration of a trip in a certain city to n(default 2)
+	decimal places.
+	'''
+	with open(filename, 'r') as f_in:
+		reader = csv.DictReader(f_in)
+        #sum up the total duration of trips
+		total_duration = 0
+		for row in reader:
+			total_duration = total_duration + float(row['duration'])
+        #divide by total number of trips to get average    
+		average_duration = total_duration / number_of_trips(filename)[2]
+        
+		return round(average_duration, n)
+
+def overage_trips(filename, n=2):
+	'''This function calculates the proportion of rides over 30 minutes in a city to n(default 2)
+	decimal places.
+	'''
+	with open(filename, 'r') as f_in:
+		reader = csv.DictReader(f_in)
+        #initialize counter for trips over 30 min
+		over_30 = 0
+		for row in reader:
+			if float(row['duration']) > 30.0:
+				over_30 += 1
+                
+		pct_over_30 = (over_30 / number_of_trips(filename)[2]) * 100.0
+        
+		return round(pct_over_30, n)
+
+for city in cleaned_files:
+	print('The average trip duration in {} was {} minutes. {}% of the trips were over 30 minutes, and thus subject to overage charges.'.format(city, avg_duration(cleaned_files[city]), overage_trips(cleaned_files[city])))
