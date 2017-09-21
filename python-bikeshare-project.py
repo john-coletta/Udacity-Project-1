@@ -217,3 +217,33 @@ def overage_trips(filename, n=2):
 
 for city in cleaned_files:
 	print('The average trip duration in {} was {} minutes. {}% of the trips were over 30 minutes, and thus subject to overage charges.'.format(city, avg_duration(cleaned_files[city]), overage_trips(cleaned_files[city])))
+	
+def user_ride_duration(filename, n=2):
+	'''This function determines the average ride duration (to n(default 2) decimal places) for each subset of rider and returns
+	the average duration for each of those groups.'''
+	with open(filename, 'r') as f_in:
+		reader = csv.DictReader(f_in)
+		
+		subs_duration = 0
+		non_subs_duration = 0
+		for row in reader:
+			if row['user_type'] == 'Subscriber':
+				subs_duration = subs_duration + float(row['duration'])
+			else:
+				non_subs_duration = non_subs_duration + float(row['duration'])
+            
+		subs_avg_duration = subs_duration / number_of_trips(filename)[0]
+		non_subs_avg_duration = non_subs_duration / number_of_trips(filename)[1]
+        
+		if subs_avg_duration > non_subs_avg_duration:
+			longer_rider = 'Subscribers'
+		elif subs_avg_duration == non_subs_avg_duration:
+			longer_rider = 'Neither'
+		else:
+			longer_rider = 'Customers'
+        
+		return(round(subs_avg_duration, n), round(non_subs_avg_duration, n), longer_rider)
+#Will choose Chicago for all further questions, but calculating all of the cities here isn't hard  
+for city in cleaned_files:
+	print('In {} the subscribers had an average ride duration of {} minutes while the short-term customers had an average ride duration of {} minutes. This means that {} took a longer ride, on average.'.format(city, user_ride_duration(cleaned_files[city])[0], user_ride_duration(cleaned_files[city])[1], user_ride_duration(cleaned_files[city])[2]))
+	
