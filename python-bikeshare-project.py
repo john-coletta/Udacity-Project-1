@@ -117,4 +117,33 @@ city_info = {'Washington': {'in_file': data_files[2],
 
 for city, filenames in city_info.items():
     condense_data(filenames['in_file'], filenames['out_file'], city)
+
+''' Now write functions to perform statistical analysis on the data sets
+'''
+
+def number_of_trips(filename):
+    """
+    This function reads in a file with trip data and reports the number of
+    trips made by subscribers, customers, and total overall.
+    """
+	with open(filename, 'r') as f_in:
+        # set up csv reader object
+		reader = csv.DictReader(f_in)
+        
+        # initialize count variables
+		n_subscribers = 0
+		n_customers = 0
+        
+        # tally up ride types
+		for row in reader:
+			if row['user_type'] == 'Subscriber':
+				n_subscribers += 1
+			else:
+				n_customers += 1
+        
+        # compute total number of rides
+		n_total = n_subscribers + n_customers
+        
+        # return tallies as a tuple
+		return(n_subscribers, n_customers, n_total)
 	
