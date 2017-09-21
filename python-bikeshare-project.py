@@ -123,10 +123,10 @@ for city, filenames in city_info.items():
 '''
 
 def number_of_trips(filename):
-    """
-    This function reads in a file with trip data and reports the number of
-    trips made by subscribers, customers, and total overall.
-    """
+	"""
+	This function reads in a file with trip data and reports the number of
+	trips made by subscribers, customers, and total overall.
+	"""
 	with open(filename, 'r') as f_in:
         # set up csv reader object
 		reader = csv.DictReader(f_in)
@@ -148,9 +148,9 @@ def number_of_trips(filename):
         # return tallies as a tuple
 		return(n_subscribers, n_customers, n_total)
 #Create a dictionary for the cleaned files
-cleaned_files = {'Washington':'./data/Washington-2016-Summary.csv', 
-'NYC':'./data/NYC-2016-Summary.csv', 
-'Chicago':'./data/Chicago-2016-Summary.csv'}
+cleaned_files = {'Washington': directory + '/data/Washington-2016-Summary.csv', 
+'NYC': directory + '/data/NYC-2016-Summary.csv', 
+'Chicago': directory + '/data/Chicago-2016-Summary.csv'}
 
 for city in cleaned_files:
 	print('{}: {}'.format(city,number_of_trips(cleaned_files[city])))
@@ -165,18 +165,23 @@ for city in cleaned_files:
 print('{} had the most trips in 2016 with {}.'.format(biggest_city, max_trips))
 #Calculate the number of trips by subscribers
 sub_trips = 0
+
 for city in cleaned_files:
-	city_subs = number_of_trips(cleaned_files[city])[0] / number_of_trips(cleaned_files[city])[2]
+	print(city)
+	city_subs = float(number_of_trips(cleaned_files[city])[0]) / number_of_trips(cleaned_files[city])[2]
+	print(city_subs)
 	if city_subs > sub_trips:
 		sub_trips = city_subs
+		print(sub_trips)
 		city_with_highest_sub_ratio = city
+		
 pct_subs = 100 * sub_trips
 
 print('{} had the highest proportion of trips made by subscribers with {}% of the total trips.'.format(city_with_highest_sub_ratio, round(pct_subs, 2)))
 #Calculate the number of trips by non-subscribers
 non_sub_trips = 0
 for city in cleaned_files:
-	city_non_subs = number_of_trips(cleaned_files[city])[1] / number_of_trips(cleaned_files[city])[2]
+	city_non_subs = float(number_of_trips(cleaned_files[city])[1]) / number_of_trips(cleaned_files[city])[2]
 	if city_non_subs > non_sub_trips:
 		non_sub_trips = city_non_subs
 		city_with_highest_non_sub = city
@@ -212,7 +217,7 @@ def overage_trips(filename, n=2):
 			if float(row['duration']) > 30.0:
 				over_30 += 1
                 
-		pct_over_30 = (over_30 / number_of_trips(filename)[2]) * 100.0
+		pct_over_30 = (float(over_30) / number_of_trips(filename)[2]) * 100.0
         
 		return round(pct_over_30, n)
 
@@ -259,7 +264,7 @@ with open(cleaned_files['Chicago'], 'r') as f_in:
 		else:
 			non_sub_durations.append(float(row['duration']))
 	
-plt.hist(sub_durations, bins=75//5, range(0,75))
+plt.hist(sub_durations, bins=75//5, range=(0,75))
 plt.title('Distribution of Duration of Subscriber Trips (Chicago)')
 plt.xlabel('Duration (min)')
 plt.savefig('sub_histogram_chicago.png')
@@ -267,8 +272,8 @@ plt.show()
 
 plt.clf()
 
-plt.hist(non_sub_durations, bins=75//5, range(0,75))
+plt.hist(non_sub_durations, bins=75//5, range=(0,75))
 plt.title('Distribution of Duration of Non-Subscriber Trips Chicago)')
 plt.xlabel('Duration (min)')
-plt.savefit('non_sub_historgram_chicago.png')
+plt.savefig('non_sub_historgram_chicago.png')
 plt.show()
