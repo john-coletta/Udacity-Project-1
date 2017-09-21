@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 from pprint import pprint
+import matplotlib.pyplot as plt
 
 directory = 'C:/John/Programming/Code/Udacity/Part 2'
 
@@ -247,3 +248,27 @@ def user_ride_duration(filename, n=2):
 for city in cleaned_files:
 	print('In {} the subscribers had an average ride duration of {} minutes while the short-term customers had an average ride duration of {} minutes. This means that {} took a longer ride, on average.'.format(city, user_ride_duration(cleaned_files[city])[0], user_ride_duration(cleaned_files[city])[1], user_ride_duration(cleaned_files[city])[2]))
 	
+sub_durations = []
+non_sub_durations = []
+with open(cleaned_files['Chicago'], 'r') as f_in:
+	Chicago_reader = csv.DictReader(f_in)
+	
+	for row in Chicago_reader:
+		if row['user_type'] == 'Subscriber':
+			sub_durations.append(float(row['duration']))
+		else:
+			non_sub_durations.append(float(row['duration']))
+	
+plt.hist(sub_durations, bins=75//5, range(0,75))
+plt.title('Distribution of Duration of Subscriber Trips (Chicago)')
+plt.xlabel('Duration (min)')
+plt.savefig('sub_histogram_chicago.png')
+plt.show()
+
+plt.clf()
+
+plt.hist(non_sub_durations, bins=75//5, range(0,75))
+plt.title('Distribution of Duration of Non-Subscriber Trips Chicago)')
+plt.xlabel('Duration (min)')
+plt.savefit('non_sub_historgram_chicago.png')
+plt.show()
