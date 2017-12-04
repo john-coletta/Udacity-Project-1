@@ -277,3 +277,101 @@ plt.title('Distribution of Duration of Non-Subscriber Trips Chicago)')
 plt.xlabel('Duration (min)')
 plt.savefig('non_sub_historgram_chicago.png')
 plt.show()
+#Now looking at trips in various cities by month
+def trips_by_month(filename):
+    '''This function will take one data set and month as int 1-12 and return a dictionary
+    of the trips by month'''
+    month_trips = {}
+    
+    with open(filename, 'r') as f_in:
+        reader = csv.DictReader(f_in)
+        
+        for row in reader:
+            if str(row['month']) not in month_trips:
+                month_trips[str(row['month'])] = 1
+            else:
+                month_trips[str(row['month'])] += 1
+        
+    return month_trips
+
+def month_graphs(filename, city, filename1=None, city1=None, filename2=None, city2=None):
+    '''This function takes a filename (up to three) and city name (up to three again) and plots the month to month trip data
+    on a bar cart.'''
+    month_file = trips_by_month(filename)
+    month_data = []
+    numerals = []
+    numerals_set = numerals
+    month_labels = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+    width = 0.3
+    for n in range(1,13):
+        month_data.append(month_file[str(n)])
+        numerals.append(n)
+        
+    if filename1:
+        month_file1 = trips_by_month(filename1)
+        month_data1 = []
+        for n in range(1,13):
+            month_data1.append(month_file1[str(n)])
+    
+    if filename2:
+        month_file2 = trips_by_month(filename2)
+        month_data2 = []
+        for n in range(1,13):
+            month_data2.append(month_file2[str(n)])
+            
+    fig, ax = plt.subplots()
+    
+    bar1 = ax.bar(numerals, month_data, width, color='r')
+    
+    if filename1:
+        for n in range(0,12):
+            numerals[n] = numerals[n] + width
+        bar2 = ax.bar(numerals, month_data1, width, color='b')
+        
+    if filename2:
+        for n in range(0,12):
+            numerals[n] = numerals[n] - (2 * width)
+        bar3 = ax.bar(numerals, month_data2, width, color='y')
+        
+    ax.set_ylabel('Number of Trips')
+    ax.set_title('Number of Bike-Share Trips per Month in Selected Cities')
+    ax.set_xticks(numerals_set)
+    ax.legend(bar1, city)
+    if city1:
+        ax.legend((bar1, bar2), (city, city1))
+    if city2:
+        ax.legend((bar1, bar2, bar3), (city, city1, city2))
+    
+    ax.set_xticklabels(month_labels)
+    plt.savefig('month_data.png')
+    plt.show()
+    
+month_graphs(cleaned_files['NYC'], 'NYC', cleaned_files['Chicago'], 'Chicago', cleaned_files['Washington'],'Washington')
+
+def seasonal_data(month_data):
+    '''Takes the output of trips_by_month and returns seasonal data
+    '''
+    winter = 0
+    spring = 0
+    summer = 0
+    fall = 0
+    for n in ['12','1','2']:
+        winter = winter + month_data[n]
+    for n in ['3','4','5']:
+        spring = spring + month_data[n]
+    for n in ['6','7','8']:
+        summer = summer + month_data[n]
+    for n in ['9','10','11']:
+        fall = fall + month_data[n]
+        
+    
+    return (winter, spring, summer, fall)
+
+nycseasons = seasonal_data(trips_by_month(cleaned_files['NYC']))
+washingtonseasons = seasonal_data(trips_by_month(cleaned_files['Washington']))
+chicagoseasons = seasonal_data(trips_by_month(cleaned_files['Chicago']))
+
+print('NYC has {} trips in the winter, {} trips in the spring, {} trips in the summer, and {} trips in the fall.'.format(nycseasons[0],nycseasons[1],nycseasons[2],nycseasons[3]))
+print('Washington has {} trips in the winter, {} trips in the spring, {} trips in the summer, and {} trips in the fall.'.format(washingtonseasons[0],washingtonseasons[1],washingtonseasons[2],washingtonseasons[3]))
+print('Chicago has {} trips in the winter, {} trips in the spring, {} trips in the summer, and {} trips in the fall.'.format(chicagoseasons[0],chicagoseasons[1],chicagoseasons[2],chicagoseasons[3]))
+
